@@ -1,0 +1,33 @@
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.pytest_temp/
+.pytest_run_new/
+.pytest_ml_run/
+
+# Frontend build output and local environment
+frontend/dist/
+frontend/.env.local
+frontend/.env*.local
+frontend/*.tsbuildinfo
+
+# Local merge datasets and serialized model artifacts (may contain private data)
+ml/data/raw/
+ml/data/processed/
+ml/models/
+ml/reports/
+
+# Local application database and managed public-repository clones
+backend/data/

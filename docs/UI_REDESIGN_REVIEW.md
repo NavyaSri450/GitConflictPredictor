@@ -1,0 +1,23 @@
+# Frontend visual redesign review
+
+The existing seven-page React application and prediction flow remain in place. The redesign increases the global text scale, raises navigation and control dimensions, adds reusable chart panels, and presents live data with explicit empty/unavailable states.
+
+Charts are lightweight inline SVG/CSS components; no chart library or frontend dependency was added. The existing prediction endpoints and the five-feature scoring contract remain unchanged. A read-only `GET /api/v1/dataset-summary` route exposes aggregate statistics for local CSVs; it does not return repository fingerprints, commit references, file paths, or row-level provenance. It returns an unavailable response if the local data files or schema cannot be verified.
+
+## Page review
+
+| Page | Implemented visual components | Data source | Limitations shown in the interface | Screenshot |
+| --- | --- | --- | --- | --- |
+| Merge Observatory | KPI strip, predicted-class donut, probability timeline, anonymous repository-group bars, collection-date bar, saved-run list, schematic branch map | Actual saved API responses in this browser; aggregate CSV summary; live health/readiness endpoints | Predicted classes are not confirmed merge outcomes. The branch map is schematic; no connected repository or branch activity feed exists. | [Screenshot](ui-screenshots/01-merge-observatory.png) |
+| Collision Studio | Manual-mode connection notice, analysis form, returned-probability donut, measured-input horizontal bars, result details | User-entered measured feature values and actual FastAPI prediction response | No repository/branch selectors, merge-base extraction, or automatic feature collection API is implemented. | [Screenshot](ui-screenshots/02-collision-studio.png) |
+| Conflict DNA | Feature-coverage heatmap, real dataset class-balance donut, means for observed features, six feature-category cards | Aggregate values calculated from the raw CSV and canonical feature list | Heatmap represents feature availability, not changed files. File paths, overlaps, commit timelines, and file-level outcomes are unavailable. | [Screenshot](ui-screenshots/03-conflict-dna.png) |
+| Simulation Lab | Saved-request input profile, schematic branch-context map, actual before/after API probability comparison | Saved request/response plus a new successful API response for modified inputs | This is an API what-if comparison, not a Git merge simulation. Conflict/clean-file lists, diffs, and merge-base evidence are unavailable. | [Screenshot](ui-screenshots/04-simulation-lab.png) |
+| Intelligence Archive | Search, predicted-class filter, source/target label filters, sort, predicted-class donut, probability timeline, detail dialog | Versioned browser-local history of successful API responses | No server history, repository identity, commit references, or confirmed merge outcomes are stored. | [Screenshot](ui-screenshots/05-intelligence-archive.png) |
+| Compare Runs | Two saved-run selectors, side-by-side result panels, probability comparison, five-input comparison bars, difference list | Two actual saved API request/response records | Branch labels are local metadata only. Repository identity, commit SHAs, path-level changes, and merge results are not in the response contract. | [Screenshot](ui-screenshots/06-compare-runs.png) |
+| System Pulse | Process/readiness/model status, dataset and class metrics, 18-field completeness map, repository-group distribution, collection timeline, measured endpoint-time bars | Live health/readiness/model-info/dataset-summary API responses | Git executable and collector health are not exposed by the backend. Response times are a single browser sample, not a benchmark. | [Screenshot](ui-screenshots/07-system-pulse.png) |
+
+## Screenshot provenance
+
+The screenshots were captured in Chromium against the local running frontend and FastAPI. The two initial form requests used five feature measurements and branch refs from two distinct rows in the existing raw CSV. The returned predictions are fresh model outputs, not the original collector labels. Simulation Lab then changed an input and submitted another actual prediction request. Browser history for the screenshots is local to the isolated capture session; it is not added to the research dataset.
+
+The CSV currently has 20 raw and processed rows across 10 repository groups, with 10 clean and 10 conflict labels. Five of the 18 numerical fields have values in all 20 rows; the other 13 remain missing. The interface never fills missing values or presents prediction output as a measured merge outcome.
